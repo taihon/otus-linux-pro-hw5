@@ -30,9 +30,10 @@ Vagrant.configure("2") do |config|
 				systemctl start rpcbind nfs-server
 				systemctl enable firewalld
 				systemctl start firewalld
-				firewall-cmd --permanent --add-service=nfs
+				firewall-cmd --permanent --add-service=nfs3
 				firewall-cmd --permanent --add-service=mountd
 				firewall-cmd --permanent --add-service=rpc-bind
+				firewall-cmd --permanent --add-port=20048/tcp
 				firewall-cmd --reload
 				mkdir /mnt/nfsstorage/upload -p
 				chown -R nfsnobody:nfsnobody /mnt/nfsstorage/upload
@@ -45,6 +46,8 @@ Vagrant.configure("2") do |config|
 			if boxname.to_s == "nfsc" then
 				box.vm.provision "shell", inline: <<-'SHELL'
 				mkdir /media/nfs_share
+				systemctl enable firewalld
+				systemctl start firewalld
 				#mount -t nfs 192.168.11.11:/mnt/nfsstorage /media/nfs_share/
 				echo -e "[Unit]\nDescription = NFS share automount\n[Mount]\nWhat=192.168.11.11:/mnt/nfsstorage\nWhere=/media/nfs_share\nType=nfs\nOptions=defaults\nTimeoutSec=15\n[Install]\nWantedBy=multi-user.target">/etc/systemd/system/media-nfs_share.mount 
 
