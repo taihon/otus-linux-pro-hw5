@@ -49,7 +49,7 @@ Vagrant.configure("2") do |config|
 				systemctl enable firewalld
 				systemctl start firewalld
 				#mount -t nfs 192.168.11.11:/mnt/nfsstorage /media/nfs_share/
-				echo -e "[Unit]\nDescription = NFS share automount\n[Mount]\nWhat=192.168.11.11:/mnt/nfsstorage\nWhere=/media/nfs_share\nType=nfs\nOptions=defaults\nTimeoutSec=15\n[Install]\nWantedBy=multi-user.target">/etc/systemd/system/media-nfs_share.mount 
+				echo -e "[Unit]\nDescription = NFS share automount\n[Mount]\nWhat=192.168.11.11:/mnt/nfsstorage\nWhere=/media/nfs_share\nType=nfs\nOptions=defaults,vers=3,proto=udp\nTimeoutSec=15\n[Install]\nWantedBy=multi-user.target">/etc/systemd/system/media-nfs_share.mount 
 
 				echo -e "[Unit]\nDescription=nfs automount for nfs_share\n\n[Automount]\nWhere=/media/nfs_share\nTimeoutIdleSec=15\n\n[Install]\nWantedBy=multi-user.target" > /etc/systemd/system/media-nfs_share.automount
 				systemctl daemon-reload
